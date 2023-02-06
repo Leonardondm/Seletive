@@ -104,3 +104,17 @@
 .paragrafo-orange{
     color: #ED8554;
 }
+
+#status{
+    margin-top: 20px;
+}
+
+#status2{
+    display: block;
+    margin-top: 10px;
+}
+
+#showElementsButton{
+    display: block;
+    margin-top: 20px;
+}

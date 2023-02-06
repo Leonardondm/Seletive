@@ -116,3 +116,14 @@ def envia_email(request, id_vaga):
         mail.save()
         messages.add_message(request, constants.ERROR, 'Erro interno do sistema!')
         return redirect(f'/vagas/vaga/{id_vaga}')
+
+
+def atualizar_status(request, id_vaga):
+    if request.method == "POST":
+        vaga = Vagas.objects.get(id=id_vaga)
+        vaga.status = request.POST.get('status')
+        vaga.save()
+        messages.add_message(request, constants.SUCCESS, 'Status da vaga atualizado com sucesso.')
+        return redirect(f'/vagas/vaga/{id_vaga}')
+    elif request.method == "GET":
+        raise Http404()

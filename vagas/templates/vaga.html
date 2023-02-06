@@ -18,12 +18,40 @@
         <br>
         <h3 class="titulo">{{vaga.titulo}}</h3>
         <p class="titulo2">{{vaga.empresa}}</p>
-        <p>Progresso atual</p>
+        <p>Progresso atual: {{ vaga.get_status_display }}</p>
         
         <div style="width: 40%" class="progress">
             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width:{{vaga.progresso}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
+
+        <form action="{% url 'atualizar_status' vaga.id %}" method="post">{% csrf_token %}         
+        <select id="status" name="status"  class="form-select-sm">
+        {% for status in vaga.choices_status %}
+            <option value="{{ status.0 }}" {% if status.0 == vaga.status %}selected{% endif %}>{{ status.1 }}</option>
+        {% endfor %}
+        </select>
+        <input type="submit" value="Atualizar status" class="btn btn-orange" id="status2">
+        </form>
+        <input type="submit" id="showElementsButton" value="Atualizar Status" class="btn btn-orange">
+
+        
     </div>
+
+   
+    <script>
+        document.getElementsByName("status")[0].style.display = "none";
+        document.getElementById("status2").style.display = "none";
+
+        const showElementsButton = document.querySelector("#showElementsButton");
+        const statusSelect = document.querySelector("select[name='status']");
+        const statusInput = document.querySelector("#status2");
+
+        showElementsButton.addEventListener("click", function() {
+        statusSelect.style.display = "block";
+        statusInput.style.display = "block";
+        showElementsButton.style.display = "none"
+        });
+    </script>
 
     <div class="bg2">
         <div class="container">
@@ -138,30 +166,39 @@
         </div>
     </div>
 
+      
     <div class="container bg3">
         <div class="row">
             <div class="col-md">
                 <p class="titulo2">Tecnologias que domino</p>
 
-                <div class="li-tech">
-                    {{vaga.tecnologias_dominadas.first}}
-
+                {% for tecnologia in vaga.tecnologias_dominadas.all %}
+                <div class="li-tech">   
+                    <a href="#" class="li-tech">              
                     <svg class="arrow-right" xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                     </svg>
+                    </a>
+                    {{ tecnologia }}
+                    
                 </div>
-
+                {% endfor %}
             </div>
 
             <div class="col-md">
                 <p class="titulo2">Preciso estudar</p>
-
+                
+                {% for tecnologia in vaga.tecnologias_estudar.all %}
+                
                 <div class="li-tech">
+                    <a href="#" class="li-tech">
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                     </svg>
-                    {{vaga.tecnologias_estudar.first}}
+                    </a>
+                    {{ tecnologia }}                    
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
